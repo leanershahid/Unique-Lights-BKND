@@ -1,0 +1,25 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Local secrets / config
+.env
+.env.*
+!.env.example
+appsettings.Development.local.json
+appsettings.*.local.json
+appsettings.Local.json
+
+# Misc
+TestResults/
+*.swp
+.DS_Store
