@@ -57,6 +57,9 @@ public static class ServiceCollectionExtensions
             .Validate(o => o.TaxRate is >= 0 and < 1, "Commerce:TaxRate must be between 0 and 1")
             .Validate(o => o.StandardShipping >= 0 && o.ExpressShipping >= 0 && o.FreeShippingThreshold >= 0, "Commerce shipping values must be >= 0")
             .ValidateOnStart();
+        services.AddOptions<StoreOptions>().Bind(configuration.GetSection(StoreOptions.SectionName))
+            .Validate(o => o.ReturnDays >= 0, "Store:ReturnDays must be >= 0")
+            .ValidateOnStart();
         services.AddOptions<RefreshCookieOptions>().Bind(configuration.GetSection(RefreshCookieOptions.SectionName))
             .Validate(o => o.SameSite != SameSiteMode.None || o.Secure, "RefreshCookie: SameSite=None requires Secure=true")
             .ValidateOnStart();

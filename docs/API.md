@@ -73,6 +73,24 @@ interface AddressRequest { label?: string | null; fullName: string; phone: strin
 
 All require Bearer.
 
+## Store settings (public)
+
+Pricing rules, delivery promises and contact details for the website, so none of them are hard-coded in the frontend.
+Configured under `Store` and `Commerce` in appsettings (or env vars such as `Store__SupportEmail`, `Commerce__FreeShippingThreshold`). Empty contact fields come back as `null` and are hidden.
+
+```ts
+interface StoreSettingsDto {
+  name: string; tagline: string | null; currency: string; taxRate: number;
+  freeShippingThreshold: number; standardShipping: number; expressShipping: number;
+  standardDeliveryDays: number; expressDeliveryDays: number; returnDays: number;
+  supportEmail: string | null; supportPhone: string | null; address: string | null; businessHours: string | null;
+}
+```
+
+| Method | Path | Data |
+|---|---|---|
+| GET | /api/store | StoreSettingsDto |
+
 ## Categories (public)
 
 ```ts

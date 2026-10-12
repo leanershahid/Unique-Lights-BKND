@@ -43,6 +43,22 @@ public sealed class CommerceOptions
 }
 
 /// <summary>
+/// Public storefront information shown on the website (footer, product pages). Empty values are hidden.
+/// </summary>
+public sealed class StoreOptions
+{
+    public const string SectionName = "Store";
+
+    public string Name { get; set; } = "Unique Lighting Studio";
+    public string? Tagline { get; set; }
+    public int ReturnDays { get; set; } = 30;
+    public string? SupportEmail { get; set; }
+    public string? SupportPhone { get; set; }
+    public string? Address { get; set; }
+    public string? BusinessHours { get; set; }
+}
+
+/// <summary>
 /// Settings for the refresh-token cookie. For local dev (same-site, http) use SameSite=Lax, Secure=false.
 /// In production where the SPA is served from a different site than the API use SameSite=None and Secure=true (HTTPS required).
 /// </summary>
