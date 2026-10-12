@@ -71,8 +71,11 @@ public sealed class SupabaseStorageService(HttpClient http, IOptions<SupabaseOpt
 
     private void AddAuth(HttpRequestMessage request)
     {
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _options.ServiceKey);
+        // New Supabase secret keys (sb_secret_...) are not JWTs and must only be sent in the apikey header;
+        // the API gateway rejects them as a Bearer token. Legacy service_role keys are JWTs and need both headers.
         request.Headers.Add("apikey", _options.ServiceKey);
+        if (_options.ServiceKey.StartsWith("eyJ", StringComparison.Ordinal))
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _options.ServiceKey);
     }
 
     private void EnsureConfigured()
