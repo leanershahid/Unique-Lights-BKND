@@ -1,0 +1,52 @@
+# Render Blueprint for the Unique Lighting Studio API.
+# Render dashboard -> New -> Blueprint -> pick this repository. Values marked `sync: false`
+# are secrets you type in the dashboard; they are never stored in this file.
+services:
+  - type: web
+    name: unique-lights-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    # Singapore is the closest Render region to the Supabase project in Mumbai (ap-south-1).
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      # Render terminates HTTPS in front of the app; trust its X-Forwarded-* headers.
+      - key: ForwardedHeaders__Enabled
+        value: "true"
+      # Applies any new EF Core migrations on deploy (the current schema is already in Supabase).
+      - key: Database__MigrateOnStartup
+        value: "true"
+
+      # Supabase Postgres via the session pooler (IPv4, port 5432).
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+
+      # Authentication
+      - key: Jwt__Secret
+        generateValue: true
+      - key: Jwt__Issuer
+        value: UniqueLights
+      - key: Jwt__Audience
+        value: UniqueLights.Web
+
+      # Supabase Storage for product images
+      - key: Supabase__Url
+        value: https://kflmlymzxqhplpwcxkqs.supabase.co
+      - key: Supabase__ServiceKey
+        sync: false
+      - key: Supabase__Bucket
+        value: product-images
+
+      # The website's origin, e.g. https://unique-lights.vercel.app (no trailing slash).
+      - key: Cors__AllowedOrigins__0
+        sync: false
+      # The refresh-token cookie must work across sites when the website is on another domain.
+      - key: RefreshCookie__SameSite
+        value: None
+      - key: RefreshCookie__Secure
+        value: "true"
